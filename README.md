@@ -31,6 +31,7 @@ plt.ylabel("Field oil production")
 plt.xlabel("Days")
 plt.show()
 ```
+<img width="299" alt="pyplot_fopr" src="https://github.com/user-attachments/assets/9b69bdee-91d9-4b37-ba20-05725f224cd9" />
 
 Here, res is a standard dict containing the following fields:
 
