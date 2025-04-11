@@ -59,7 +59,7 @@ requires-python = ">=3.9"
 # This is either text indicating the license for the distribution, or a file
 # that contains the license.
 # https://packaging.python.org/en/latest/specifications/core-metadata/#license
-license = { file = "LICENSE.txt" }
+license = { file = "LICENSE" }
 
 # This field adds keywords for your project which will appear on the
 # project page. What does your project relate to?
@@ -114,7 +114,10 @@ classifiers = [
 #
 # For an analysis of this field vs pip's requirements files see:
 # https://packaging.python.org/discussions/install-requires-vs-requirements/
-dependencies = ["peppercorn"]
+dependencies = [
+    "juliacall==0.9.24",
+    "numpy>=1.13.0,<3.0.0"
+]
 
 # List additional groups of dependencies here (e.g. development
 # dependencies). Users will be able to install these using the "extras"

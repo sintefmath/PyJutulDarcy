@@ -1,0 +1,13 @@
+{
+    "julia": "1",
+    "packages": {
+        "JutulDarcy": {
+            "uuid": "82210473-ab04-4dce-b31b-11573c4f8e0a",
+            "version": "0.2"
+        },
+        "HYPRE": {
+            "uuid": "b5ffcf37-a2bd-41ab-a3da-4bd9bc8ad771",
+            "version": "1"
+        }
+    }
+}
