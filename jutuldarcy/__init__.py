@@ -34,6 +34,17 @@ def simulate_data_file(data_file_name, convert = True, units = jl.missing, **kwa
     
     If you are looking for files to test, see test_file_path() for a few
     examples of files to test.
+
+    Examples:
+    pth = test_file_path("SPE1", "SPE1.DATA")
+    # Simulate the data file and convert to Python dictionary
+    res = jd.simulate_data_file(pth, units = "field", restart = True, output_path = "/tmp")
+    # Write output to disk and apply restart (restarting if simulation was aborted, otherwise retrieving results from disk)
+    import tempfile
+    res = jd.simulate_data_file(pth, restart = True, output_path = tempfile.gettempdir())
+    # Simulate and change the units to field units even if input file has other units
+    res = jd.simulate_data_file(pth, units = "field")
+
     """
     units = _convert_units(units)
     res = jl.JutulDarcy.simulate_data_file(data_file_name, **kwargs)
