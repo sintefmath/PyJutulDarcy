@@ -119,6 +119,11 @@ dependencies = [
     "numpy>=1.13.0,<3.0.0"
 ]
 
+[tool.setuptools]
+packages = ["jutuldarcy"]
+include-package-data = false
+package-data = {jutuldarcy = ["juliapkg.json"]}
+
 # List additional groups of dependencies here (e.g. development
 # dependencies). Users will be able to install these using the "extras"
 # syntax, for example:
