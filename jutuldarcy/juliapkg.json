@@ -12,6 +12,10 @@
         "Jutul": {
             "uuid": "2b460a1a-8a2b-45b2-b125-b5c536396eb9",
             "version": "0.3"
+        },
+        "GeoEnergyIO": {
+            "uuid": "3b1dd628-313a-45bb-9d8d-8f3c48dcb5d4",
+            "version": "1"
         }
     }
 }
