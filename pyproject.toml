@@ -67,20 +67,20 @@ license = { file = "LICENSE" }
 # Note that this is a list of additional keywords, separated
 # by commas, to be used to assist searching for the distribution in a
 # larger catalog.
-keywords = ["reservoir simulation"]
+keywords = ["reservoir simulation", "jutuldarcy"]
 
 # This should be your name or the name of the organization who originally
 # authored the project, and a valid email address corresponding to the name
 # listed.
 authors = [
-  { name = "Olav Møyner", email = "olav.moyner@sintef.no" },
+  { name = "Olav Møyner", email = "olav.moyner@gmail.com" },
 ]
 
 # This should be your name or the names of the organization who currently
 # maintains the project, and a valid email address corresponding to the name
 # listed.
 maintainers = [
-  { name = "Olav Møyner", email = "olav.moyner@sintef.no" },
+  { name = "Olav Møyner", email = "olav.moyner@gmail.com" },
 ]
 
 # Classifiers help users find your project by categorizing it.
@@ -148,8 +148,6 @@ package-data = {jutuldarcy = ["juliapkg.json"]}
 # maintainers, and where to support the project financially. The key is
 # what's used to render the link text on PyPI.
 [project.urls]
-"Homepage" = "https://github.com/pypa/sampleproject"
-"Bug Reports" = "https://github.com/pypa/sampleproject/issues"
-"Funding" = "https://donate.pypi.org"
-"Say Thanks!" = "http://saythanks.io/to/example"
-"Source" = "https://github.com/pypa/sampleproject/"
+"Repository" = "https://github.com/sintefmath/PyJutulDarcy"
+"Julia repository" = "https://github.com/sintefmath/JutulDarcy.jl"
+"Documentation" = "https://sintefmath.github.io/JutulDarcy.jl/dev/"
