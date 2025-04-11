@@ -1,6 +1,6 @@
 # PyJutulDarcy
 
-Python wrapper for [JutulDarcy.jl, a fully differentiable reservoir simulator written in Julia](https://github.com/sintefmath/JutulDarcy.jl). This package facilitates automatic installation of JutulDarcy from Python, as well as a minimal interface that allows fast simulation of .DATA files in pure Python.
+Python wrapper for [JutulDarcy.jl, a fully differentiable reservoir simulator written in Julia](https://github.com/sintefmath/JutulDarcy.jl). This package facilitates automatic installation of JutulDarcy from Python, as well as a minimal interface that allows fast simulation of .DATA files in pure Python. For more details about JutulDarcy.jl, please see the [Julia Documentation](https://sintefmath.github.io/JutulDarcy.jl/dev/).
 
 The package also provides access to all the functions of the Julia version under `jutuldarcy.jl.JutulDarcy`, `jutuldarcy.jl.GeoEnergyIO` and `jutuldarcy.jl.Jutul`. These functions are directly wrapped using [JuliaCall](https://github.com/JuliaPy/PythonCall.jl). For more details, see the [JuliaCall Documentation on converting of types](https://juliapy.github.io/PythonCall.jl/stable/conversion-to-julia/).
 
@@ -31,6 +31,7 @@ plt.ylabel("Field oil production")
 plt.xlabel("Days")
 plt.show()
 ```
+
 <img width="299" alt="pyplot_fopr" src="https://github.com/user-attachments/assets/9b69bdee-91d9-4b37-ba20-05725f224cd9" />
 
 Here, res is a standard dict containing the following fields:
