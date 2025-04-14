@@ -1,10 +1,11 @@
 from .julia_import import jl
 import numpy as np
 
-def convert_to_pydict(result, units = jl.missing):
-    c = result.extra[jl.Symbol("case")]
+def convert_to_pydict(result, case = None, units = jl.missing):
+    if case == None:
+        case = result.extra[jl.Symbol("case")]
     units = _convert_units(units)
-    smry = jl.JutulDarcy.summary_result(c, result, units)
+    smry = jl.JutulDarcy.summary_result(case, result, units)
 
     wdict = dict()
     for k in jl.keys(smry["VALUES"]["WELLS"]):
