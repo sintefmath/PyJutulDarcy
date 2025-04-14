@@ -1,7 +1,7 @@
 from .julia_import import jl
 from .conversion import _convert_units, convert_to_pydict
 
-def simulate_data_file(data_file_name, convert = True, units = jl.missing, **kwargs):
+def simulate_data_file(data_file_name, convert = False, units = jl.missing, **kwargs):
     """
     Simulate a reservoir .DATA file using JutulDarcy and return the results as a
     Python dictionary. The resulting dictionary has the following fields:
@@ -35,7 +35,7 @@ def simulate_data_file(data_file_name, convert = True, units = jl.missing, **kwa
         out = res
     return out
 
-def simulate_reservoir(*arg, convert = True, units = jl.missing, **kwargs):
+def simulate_reservoir(*arg, convert = False, units = jl.missing, **kwargs):
     """
     Simulate a reservoir using JutulDarcy and return the results as a Python
     dictionary. The resulting dictionary has the following fields:
