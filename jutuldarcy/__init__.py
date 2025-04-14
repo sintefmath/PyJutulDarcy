@@ -9,3 +9,5 @@ from .parsing import *
 from .conversion import *
 from .reservoir import *
 from .units import *
+from .meshes import *
+from .wells import *
