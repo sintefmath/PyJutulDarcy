@@ -1,4 +1,5 @@
 from .julia_import import jl
+import numpy as np
 
 def setup_vertical_well(*arg, name = "Well", **kwargs):
     if isinstance(name, str):
@@ -11,6 +12,8 @@ def setup_well(*arg, name = "Well", **kwargs):
     return jl.setup_well(*arg, name = name, **kwargs)
 
 def setup_injector_control(val, itype, mix, density = 1.0, **kwargs):
+    mix = np.array(mix)
+    mix = jl.convert(jl.Vector, mix)
     if itype == "rate":
         t = jl.TotalRateTarget(val)
     elif itype == "bhp":
