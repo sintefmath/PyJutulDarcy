@@ -36,3 +36,11 @@ def _convert_units(units):
             raise RuntimeError("units must be one of field, si, metric, lab")
         units = jl.Symbol(units)
     return units
+
+def _stringdict_to_symdict(d_py):
+    d_jl = dict()
+    for k in d_py.keys():
+        if isinstance(k, str):
+            k = jl.Symbol(k)
+        d_jl[k] = d_py[k]
+    return d_jl
