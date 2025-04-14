@@ -38,9 +38,8 @@ def _convert_units(units):
     return units
 
 def _stringdict_to_symdict(d_py):
-    d_jl = dict()
+    d_jl = jl.Dict()
     for k in d_py.keys():
-        if isinstance(k, str):
-            k = jl.Symbol(k)
-        d_jl[k] = d_py[k]
+        ks = jl.Symbol(k)
+        d_jl[ks] = d_py[k]
     return d_jl

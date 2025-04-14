@@ -7,7 +7,7 @@ def setup_reservoir_model(*arg, **kwargs):
 def setup_reservoir_state(*arg, **kwargs):
     return jl.setup_reservoir_state(*arg, **kwargs)
 
-def setup_reservoir_forces(*arg, controls = dict(), limits = dict(), **kwargs):
-    controls = _stringdict_to_symdict(controls)
+def setup_reservoir_forces(*arg, control = dict(), limits = dict(), **kwargs):
+    control = _stringdict_to_symdict(control)
     limits = _stringdict_to_symdict(limits)
-    return jl.setup_reservoir_forces(*arg, **kwargs)
+    return jl.setup_reservoir_forces(*arg, control = control, limits = limits, **kwargs)
