@@ -59,7 +59,7 @@ requires-python = ">=3.9"
 # This is either text indicating the license for the distribution, or a file
 # that contains the license.
 # https://packaging.python.org/en/latest/specifications/core-metadata/#license
-license = { file = "LICENSE" }
+license = "MIT"
 
 # This field adds keywords for your project which will appear on the
 # project page. What does your project relate to?
@@ -92,9 +92,6 @@ classifiers = [
   #   4 - Beta
   #   5 - Production/Stable
   "Development Status :: 4 - Beta",
-
-  # Pick your license as you wish
-  "License :: OSI Approved :: MIT License",
 
   # Specify the Python versions you support here. In particular, ensure
   # that you indicate you support Python 3. These classifiers are *not*
