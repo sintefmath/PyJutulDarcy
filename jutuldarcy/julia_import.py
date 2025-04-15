@@ -35,3 +35,4 @@ import numpy as np
 
 # Load the main package + linear solver
 jl.seval("using JutulDarcy, Jutul, HYPRE, MultiComponentFlash, GeoEnergyIO")
+jl.seval("import JutulDarcy: summary_result")
