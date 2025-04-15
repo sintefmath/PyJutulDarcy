@@ -116,7 +116,8 @@ classifiers = [
 # https://packaging.python.org/discussions/install-requires-vs-requirements/
 dependencies = [
     "juliacall==0.9.24",
-    "numpy>=1.13.0,<3.0.0"
+    "numpy>=1.13.0,<3.0.0",
+    "juliapkg>=0.1"
 ]
 
 [tool.setuptools]
