@@ -121,6 +121,7 @@ dependencies = [
 packages = ["jutuldarcy"]
 include-package-data = false
 package-data = {jutuldarcy = ["juliapkg.json"]}
+license-files = ["LICENSE"]
 
 # List additional groups of dependencies here (e.g. development
 # dependencies). Users will be able to install these using the "extras"

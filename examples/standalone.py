@@ -1,7 +1,5 @@
-import importlib
 import jutuldarcy as jd
 import numpy as np
-importlib.reload(jd)
 # Grab some unit conversion factors
 day = jd.si_unit("day")
 Darcy = jd.si_unit("darcy")

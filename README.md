@@ -71,10 +71,8 @@ This example is a port of [the first JutulDarcy.jl documentation example](https:
 Note that only a subset of the full set of routines are available directly in the wrapper. PRs that add more wrapping functionality is welcome.
 
 ```python
-import importlib
 import jutuldarcy as jd
 import numpy as np
-importlib.reload(jd)
 # Grab some unit conversion factors
 day = jd.si_unit("day")
 Darcy = jd.si_unit("darcy")
