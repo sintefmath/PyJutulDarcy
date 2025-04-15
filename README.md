@@ -20,8 +20,8 @@ On first time usage of the package [JuliaCall](https://github.com/JuliaPy/Python
 import jutuldarcy as jd
 # Load SPE9 dataset to disk
 pth = jd.test_file_path("SPE9", "SPE9.DATA")
-# Simulate the model
-res = jd.simulate_data_file(pth)
+# Simulate the model and convert to Python dicts
+res = jd.simulate_data_file(pth, convert = True)
 # Get field quantities and plot
 import matplotlib.pyplot as plt
 fopr = res["FIELD"]["FOPR"]
@@ -41,7 +41,7 @@ Here, res is a standard dict containing the following fields:
 - "STATES": Reservoir states for all active cells, given as a list with a dict for each timestep. For example, `res["STATES"][10]["Rs"]` will give you an array of the solution gas-oil-ratio at step 10.
 - "DAYS": Array of the number of days elapsed for each step.
 
-Optionally, `convert = False` can be passed to get access to the "full" output as seen in Julia, where it is possible to get access to grid geometry, model parameters, and so on.
+Optionally, if the keyword argument `convert` to `simulate_data_file` is set to `False` or left defaulted, the "full" output as seen in Julia will be returned, where it is possible to get access to grid geometry, model parameters, and so on.
 
 ## Paper and citing
 
