@@ -12,6 +12,8 @@ nz = 10
 cart_dims = (nx, ny, nz)
 physical_dims = (1000.0*meter, 1000.0*meter, 100.0*meter)
 g = jd.CartesianMesh(cart_dims, physical_dims)
+# Convert to unstructured representation
+g = jd.UnstructuredMesh(g)
 domain = jd.reservoir_domain(g, permeability = 0.3*Darcy, porosity = 0.2)
 Injector = jd.setup_vertical_well(domain, 1, 1, name = "Injector")
 Producer = jd.setup_well(domain, (nx, ny, 1), name = "Producer")
