@@ -2,6 +2,17 @@ from .julia_import import jl
 import numpy as np
 
 def convert_to_pydict(result, case = None, units = jl.missing):
+    """
+    Convert a JutulDarcy result to a Python dictionary.
+    The resulting dictionary has the following fields:
+
+    - WELLS: A dictionary of well results, where each key is a well name and the
+      value is a dictionary of results for that well.
+    - FIELD: A dictionary of field results.
+    - DAYS: A numpy array of time in days.
+    - STATES: A list of dictionaries, each representing the state of the reservoir
+      at a given time step. The field vary based on the type of simulation.
+    """
     if case == None:
         case = result.extra[jl.Symbol("case")]
     units = _convert_units(units)
