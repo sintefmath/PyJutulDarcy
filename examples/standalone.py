@@ -54,5 +54,9 @@ result = jd.simulate_reservoir(state0, model, dt, parameters = parameters, force
 # 1. Run in an environment that supports plotting (OpenGL capable)
 # 2. Run jd.install_plotting()
 # 
-plt = jd.plot_reservoir(model, result.states)
-jd.make_interactive()
+# plt = jd.plot_reservoir(model, result.states)
+# jd.make_interactive()
+
+# Convert to Python dictionary
+case = jd.setup_jutul_case(state0, model, dt, forces, parameters)
+res_py = jd.convert_to_pydict(result, case, units = "field")

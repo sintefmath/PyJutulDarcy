@@ -6,7 +6,6 @@ Python wrapper for [JutulDarcy.jl, a fully differentiable reservoir simulator wr
 - Geothermal simulation and simulation of CO2 sequestration
 - Can read standard input files and corner-point grids, or make your own
 
-
 This package facilitates automatic installation of JutulDarcy from Python, as well as a minimal interface that allows fast simulation of .DATA files in pure Python. For more details about JutulDarcy.jl, please see the [Julia Documentation](https://sintefmath.github.io/JutulDarcy.jl/dev/).
 
 The package also provides access to all the functions of the Julia version under `jutuldarcy.jl.JutulDarcy`, `jutuldarcy.jl.GeoEnergyIO` and `jutuldarcy.jl.Jutul`. These functions are directly wrapped using [JuliaCall](https://github.com/JuliaPy/PythonCall.jl). For more details, see the [JuliaCall Documentation on converting of types](https://juliapy.github.io/PythonCall.jl/stable/conversion-to-julia/).
@@ -124,6 +123,10 @@ controls = dict(Injector = I_ctrl, Producer = P_ctrl)
 forces = jd.setup_reservoir_forces(model, control = controls)
 result = jd.simulate_reservoir(state0, model, dt, parameters = parameters, forces = forces)
 ```
+
+#### Converting to Python dict
+
+#### Plotting results (experimental)
 
 We can also plot the results if the plotting has been installed:
 
