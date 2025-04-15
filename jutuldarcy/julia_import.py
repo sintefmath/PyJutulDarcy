@@ -32,8 +32,10 @@ else:
         os.environ[k] = os.environ.get(k, default)
 
 # Actual start of module - now that juliacall can be imported
-from juliacall import Main as jl, convert as jlconvert
+import juliacall
+from juliacall import convert as jlconvert
+jl = juliacall.newmodule("JutulDarcy")
 import numpy as np
 
 # Load the main package + linear solver
-jl.seval("using JutulDarcy, Jutul, HYPRE, GeoEnergyIO")
+jl.seval("using JutulDarcy, Jutul, HYPRE, MultiComponentFlash, GeoEnergyIO")
