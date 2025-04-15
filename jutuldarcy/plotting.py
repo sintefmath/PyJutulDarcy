@@ -12,6 +12,7 @@ def activate_plotting():
 
 def install_plotting():
     juliapkg.add("GLMakie", "e9467ef8-e4e7-5192-8a1a-b1aee30e663a")
+    juliapkg.resolve()
     activate_plotting()
     return True
 
