@@ -124,6 +124,13 @@ result = jd.simulate_reservoir(state0, model, dt, parameters = parameters, force
 
 #### Converting to Python dict
 
+We can convert the result into a standard `dict` with `numpy` array types:
+
+```python
+case = jd.setup_jutul_case(state0, model, dt, forces, parameters)
+res_py = jd.convert_to_pydict(result, case, units = "field")
+```
+
 #### Plotting results (experimental)
 
 We can also plot the results if the plotting has been installed:
