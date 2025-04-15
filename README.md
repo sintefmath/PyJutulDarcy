@@ -141,6 +141,7 @@ We can also plot the results if the plotting has been installed:
 plt = jd.plot_reservoir(model, result.states)
 jd.make_interactive()
 ```
+<img width="790" alt="front" src="https://github.com/user-attachments/assets/8b7f1f99-131d-4275-8290-51813ba96b43" />
 
 ## Paper and citing
 
