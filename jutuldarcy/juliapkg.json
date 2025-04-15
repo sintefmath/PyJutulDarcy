@@ -16,6 +16,10 @@
         "GeoEnergyIO": {
             "uuid": "3b1dd628-313a-45bb-9d8d-8f3c48dcb5d4",
             "version": "1"
+        },
+        "MultiComponentFlash": {
+            "uuid": "35e5bd01-9722-4017-9deb-64a5d32478ff",
+            "version": "1"
         }
     }
 }

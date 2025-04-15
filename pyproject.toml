@@ -33,7 +33,7 @@ name = "jutuldarcy" # REQUIRED, is the only field that cannot be marked as dynam
 #
 # For a discussion on single-sourcing the version, see
 # https://packaging.python.org/guides/single-sourcing-package-version/
-version = "1.0.1" # REQUIRED, although can be dynamic
+version = "1.1.0" # REQUIRED, although can be dynamic
 
 # This is a one-line description or tagline of what your project does. This
 # corresponds to the "Summary" metadata field:
@@ -91,7 +91,7 @@ classifiers = [
   #   3 - Alpha
   #   4 - Beta
   #   5 - Production/Stable
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
 
   # Pick your license as you wish
   "License :: OSI Approved :: MIT License",
@@ -116,7 +116,8 @@ classifiers = [
 # https://packaging.python.org/discussions/install-requires-vs-requirements/
 dependencies = [
     "juliacall==0.9.24",
-    "numpy>=1.13.0,<3.0.0"
+    "numpy>=1.13.0,<3.0.0",
+    "juliapkg>=0.1"
 ]
 
 [tool.setuptools]
