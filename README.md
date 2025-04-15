@@ -6,7 +6,7 @@ Python wrapper for [JutulDarcy.jl, a fully differentiable reservoir simulator wr
 - Geothermal simulation and simulation of CO2 sequestration
 - Can read standard input files and corner-point grids, or make your own
 
-This package facilitates automatic installation of JutulDarcy from Python, as well as a minimal interface that allows fast simulation of .DATA files in pure Python. For more details about JutulDarcy.jl, please see the [Julia Documentation](https://sintefmath.github.io/JutulDarcy.jl/dev/).
+This package facilitates automatic installation of JutulDarcy from Python, as well as a minimal interface that allows fast simulation of .DATA files in pure Python. For more details about JutulDarcy.jl, please see the [Julia Documentation](https://sintefmath.github.io/JutulDarcy.jl/dev/). If you want to run MPI or CUDA accelerated simulations we recommend working either in Julia or the [standalone compiled version](https://github.com/sintefmath/JutulDarcyApps.jl).
 
 The package also provides access to all the functions of the Julia version under `jutuldarcy.jl.JutulDarcy`, `jutuldarcy.jl.GeoEnergyIO` and `jutuldarcy.jl.Jutul`. These functions are directly wrapped using [JuliaCall](https://github.com/JuliaPy/PythonCall.jl). For more details, see the [JuliaCall Documentation on converting of types](https://juliapy.github.io/PythonCall.jl/stable/conversion-to-julia/).
 
