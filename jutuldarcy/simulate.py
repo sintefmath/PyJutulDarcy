@@ -37,18 +37,14 @@ def simulate_data_file(data_file_name, convert = False, units = jl.missing, **kw
 
 def simulate_reservoir(*arg, convert = False, units = jl.missing, **kwargs):
     """
-    Simulate a reservoir using JutulDarcy and return the results as a Python
-    dictionary. The resulting dictionary has the following fields:
+    Simulate a reservoir using JutulDarcy.
 
-    - WELLS: A dictionary of well results, where each key is a well name and the
-      value is a dictionary of results for that well.
-    - FIELD: A dictionary of field results.
-    - DAYS: A numpy array of time in days.
-    - STATES: A list of dictionaries, each representing the state of the reservoir
-      at a given time step. The field vary based on the type of simulation.
+    Wraps [JutulDarcy.simulate_reservoir](https://sintefmath.github.io/JutulDarcy.jl/dev/man/highlevel#JutulDarcy.simulate_reservoir) and returns the results as a Python
 
     Examples:
-    res = jd.simulate_reservoir(...)
+    res = jd.simulate_reservoir(case)
+    res = jd.simulate_reservoir(case, convert = True)
+    res = jd.simulate_reservoir(state0, model, dt, parameters = prm, forces = forces)
     """
     res = jl.JutulDarcy.simulate_reservoir(*arg, **kwargs)
     if convert:
