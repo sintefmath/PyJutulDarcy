@@ -145,19 +145,17 @@ jd.make_interactive()
 
 ## Paper and citing
 
-The main paper describing `JutulDarcy.jl` is *JutulDarcy.jl - a Fully Differentiable High-Performance Reservoir Simulator Based on Automatic Differentiation*:
+The main paper describing `JutulDarcy.jl` is [*JutulDarcy.jl - a Fully Differentiable High-Performance Reservoir Simulator Based on Automatic Differentiation*, available as open access from Springer](https://link.springer.com/article/10.1007/s10596-025-10366-6#citeas):
 
 ```bibtex
-@article{jutuldarcy_ecmor_2024,
-   author = "M{\o}yner, O.",
-   title = "JutulDarcy.jl - a Fully Differentiable High-Performance Reservoir Simulator Based on Automatic Differentiation", 
-   year = "2024",
-   volume = "2024",
-   number = "1",
-   pages = "1-9",
-   doi = "https://doi.org/10.3997/2214-4609.202437111",
-   publisher = "European Association of Geoscientists \& Engineers",
-   issn = "2214-4609",
+@article{jutuldarcy,
+  title={JutulDarcy.jl - a fully differentiable high-performance reservoir simulator based on automatic differentiation},
+  author={M{\o}yner, Olav},
+  journal={Computational Geosciences},
+  volume={29},
+  number={30},
+  year={2025},
+  publisher={Springer}
 }
 ```
 
