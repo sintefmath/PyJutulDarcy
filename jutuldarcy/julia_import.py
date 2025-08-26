@@ -27,6 +27,17 @@ else:
     ):
         os.environ[k] = os.environ.get(k, default)
 
+
+# Add packages to project
+import juliapkg as jpkg
+
+jpkg.add("JutulDarcy", "82210473-ab04-4dce-b31b-11573c4f8e0a", version="0.2")
+jpkg.add("HYPRE", "b5ffcf37-a2bd-41ab-a3da-4bd9bc8ad771", version="1")
+jpkg.add("Jutul", "2b460a1a-8a2b-45b2-b125-b5c536396eb9", version="0.3")
+jpkg.add("GeoEnergyIO", "3b1dd628-313a-45bb-9d8d-8f3c48dcb5d4", version="1")
+jpkg.add("MultiComponentFlash", "35e5bd01-9722-4017-9deb-64a5d32478ff", version="1")
+
+
 # Actual start of module - now that juliacall can be imported
 import juliacall
 from juliacall import convert as jlconvert
