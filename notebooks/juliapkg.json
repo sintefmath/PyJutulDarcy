@@ -1,0 +1,25 @@
+{
+    "julia": "1",
+    "packages": {
+        "JutulDarcy": {
+            "uuid": "82210473-ab04-4dce-b31b-11573c4f8e0a",
+            "version": "0.2"
+        },
+        "HYPRE": {
+            "uuid": "b5ffcf37-a2bd-41ab-a3da-4bd9bc8ad771",
+            "version": "1"
+        },
+        "Jutul": {
+            "uuid": "2b460a1a-8a2b-45b2-b125-b5c536396eb9",
+            "version": "0.3"
+        },
+        "GeoEnergyIO": {
+            "uuid": "3b1dd628-313a-45bb-9d8d-8f3c48dcb5d4",
+            "version": "1"
+        },
+        "MultiComponentFlash": {
+            "uuid": "35e5bd01-9722-4017-9deb-64a5d32478ff",
+            "version": "1"
+        }
+    }
+}
