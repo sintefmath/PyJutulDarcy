@@ -7,3 +7,9 @@ def si_unit(u):
     if isinstance(u, str):
         u = jl.Symbol(u)
     return jl.Jutul.si_unit(u)
+
+def convert_to_si(value, unit):
+    if isinstance(unit, str):
+        unit = jl.Symbol(unit)
+    return jl.convert_to_si(value, unit)
+

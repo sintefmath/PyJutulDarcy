@@ -4,4 +4,4 @@ channels:
 dependencies:
   - python>=3.10
   - numpy>=1.13.0,<2.0.0
-  - pyjuliacall>=0.9.24
+  - pyjuliacall>=0.9.27

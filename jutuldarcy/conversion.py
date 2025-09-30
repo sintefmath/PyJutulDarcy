@@ -54,3 +54,9 @@ def _stringdict_to_symdict(d_py):
         ks = jl.Symbol(k)
         d_jl[ks] = d_py[k]
     return d_jl
+
+def symdict_to_pydict(d_jl):
+    d_py = dict()
+    for k, v in d_jl.items():
+        d_py[str(k)] = d_jl[jl.Symbol(k)]
+    return d_py

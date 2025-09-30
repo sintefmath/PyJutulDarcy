@@ -12,3 +12,5 @@ def AqueousPhase():
 def ImmiscibleSystem(*arg, **kwargs):
     return jl.ImmiscibleSystem(*arg, **kwargs)
 
+def SinglePhaseSystem(*arg, **kwargs):
+    return jl.SinglePhaseSystem(*arg, **kwargs)
