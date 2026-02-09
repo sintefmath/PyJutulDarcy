@@ -11,6 +11,6 @@ result = jd.simulate_reservoir(case)
 if not jd.activate_plotting():
     print("Plotting is not available in this environment. Please run jd.install_plotting() and try again.")
 # Plot the reservoir results (3D)
-jd.plot_reservoir(case.model, result)
+jd.plot_reservoir(case.model, result.states)
 # Plot the well results (2D)
 jd.plot_well_results(result)

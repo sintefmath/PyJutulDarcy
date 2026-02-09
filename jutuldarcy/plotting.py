@@ -56,4 +56,4 @@ async def plot_alive(F, *arg, **kwargs):
         if not jl.isopen(fig.scene):
             break
         jl.seval("yield()")
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.01)
