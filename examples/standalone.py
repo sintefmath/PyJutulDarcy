@@ -23,7 +23,7 @@ rhoLS = 1000.0*kg/meter**3
 rhoGS = 100.0*kg/meter**3
 reference_densities = [rhoLS, rhoGS]
 sys = jd.ImmiscibleSystem(phases, reference_densities = reference_densities)
-model, parameters = jd.setup_reservoir_model(domain, sys, wells = [Injector, Producer])
+model = jd.setup_reservoir_model(domain, sys, wells = [Injector, Producer])
 # Replace dynamic functions with custom ones
 c = np.array([1e-6/bar, 1e-4/bar])
 density = jd.jl.ConstantCompressibilityDensities(
@@ -42,13 +42,13 @@ state0 = jd.setup_reservoir_state(model,
 nstep = 25
 dt = np.repeat(365.0*day, nstep)
 # Set up timestepping and well controls
-pv = jd.pore_volume(model, parameters)
+pv = jd.pore_volume(model)
 inj_rate = 1.5*np.sum(pv)/sum(dt)
 I_ctrl = jd.setup_injector_control(inj_rate, "rate", np.array([0.0, 1.0]), density = rhoGS)
 P_ctrl = jd.setup_producer_control(100*bar, "bhp")
 controls = dict(Injector = I_ctrl, Producer = P_ctrl)
 forces = jd.setup_reservoir_forces(model, control = controls)
-result = jd.simulate_reservoir(state0, model, dt, parameters = parameters, forces = forces)
+result = jd.simulate_reservoir(state0, model, dt, forces = forces)
 
 # To run the following:
 # 1. Run in an environment that supports plotting (OpenGL capable)
@@ -58,5 +58,5 @@ result = jd.simulate_reservoir(state0, model, dt, parameters = parameters, force
 # jd.make_interactive()
 
 # Convert to Python dictionary
-case = jd.setup_jutul_case(state0, model, dt, forces, parameters)
+case = jd.setup_jutul_case(state0, model, dt, forces)
 res_py = jd.convert_to_pydict(result, case, units = "field")

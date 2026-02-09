@@ -96,7 +96,7 @@ rhoLS = 1000.0*kg/meter**3
 rhoGS = 100.0*kg/meter**3
 reference_densities = [rhoLS, rhoGS]
 sys = jd.ImmiscibleSystem(phases, reference_densities = reference_densities)
-model, parameters = jd.setup_reservoir_model(domain, sys, wells = [Injector, Producer])
+model = jd.setup_reservoir_model(domain, sys, wells = [Injector, Producer])
 # Replace dynamic functions with custom ones
 c = np.array([1e-6/bar, 1e-4/bar])
 density = jd.jl.ConstantCompressibilityDensities(
