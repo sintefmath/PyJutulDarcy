@@ -3,8 +3,9 @@ from .conversion import _convert_units, convert_to_pydict
 
 def simulate_data_file(data_file_name, convert = False, units = jl.missing, **kwargs):
     """
-    Simulate a reservoir .DATA file using JutulDarcy and return the results as a
-    Python dictionary. The resulting dictionary has the following fields:
+    Simulate a reservoir .DATA file using JutulDarcy and return the results
+    either as a JutulDarcy simulation result, or as a Python dictionary (if
+    convert = True). The resulting dictionary has the following fields:
 
     - WELLS: A dictionary of well results, where each key is a well name and the
       value is a dictionary of results for that well.
@@ -39,7 +40,9 @@ def simulate_reservoir(*arg, convert = False, units = jl.missing, **kwargs):
     """
     Simulate a reservoir using JutulDarcy.
 
-    Wraps [JutulDarcy.simulate_reservoir](https://sintefmath.github.io/JutulDarcy.jl/dev/man/highlevel#JutulDarcy.simulate_reservoir) and returns the results as a Python
+    Wraps
+    [JutulDarcy.simulate_reservoir](https://sintefmath.github.io/JutulDarcy.jl/dev/man/highlevel#JutulDarcy.simulate_reservoir)
+    and returns the results as either a simulation result or a Python Dict (if convert = True).
 
     Examples:
     res = jd.simulate_reservoir(case)
@@ -53,3 +56,14 @@ def simulate_reservoir(*arg, convert = False, units = jl.missing, **kwargs):
         out = res
     return out
 
+def setup_case_from_data_file(*arg, **kwargs):
+    """
+    Setup a case from a .DATA file.
+
+    Wraps [JutulDarcy.setup_case_from_data_file](https://sintefmath.github.io/JutulDarcy.jl/dev/man/basics/input_files#DATA-files-from-commercial-reservoir-modelling-software).
+
+    Examples:
+    case = jd.setup_case_from_data_file(case)
+    res = jd.simulate_reservoir(case)
+    """
+    return jl.JutulDarcy.setup_case_from_data_file(*arg, **kwargs)
