@@ -176,3 +176,4 @@ cython_debug/
 *.lock
 *.ipynb
 Manifest.toml
+/.vscode
