@@ -1,5 +1,6 @@
 import jutuldarcy as jd
 import numpy as np
+
 # Grab some unit conversion factors
 day = jd.si_unit("day")
 Darcy = jd.si_unit("darcy")
@@ -10,53 +11,52 @@ bar = jd.si_unit("bar")
 nx = ny = 25
 nz = 10
 cart_dims = (nx, ny, nz)
-physical_dims = (1000.0*meter, 1000.0*meter, 100.0*meter)
+physical_dims = (1000.0 * meter, 1000.0 * meter, 100.0 * meter)
 g = jd.CartesianMesh(cart_dims, physical_dims)
 # Convert to unstructured representation
 g = jd.UnstructuredMesh(g)
-domain = jd.reservoir_domain(g, permeability = 0.3*Darcy, porosity = 0.2)
-Injector = jd.setup_vertical_well(domain, 1, 1, name = "Injector")
-Producer = jd.setup_well(domain, (nx, ny, 1), name = "Producer")
+domain = jd.reservoir_domain(g, permeability=0.3 * Darcy, porosity=0.2)
+Injector = jd.setup_vertical_well(domain, 1, 1, name="Injector")
+Producer = jd.setup_well(domain, (nx, ny, 1), name="Producer")
 # Show the properties in the domain
 phases = (jd.LiquidPhase(), jd.VaporPhase())
-rhoLS = 1000.0*kg/meter**3
-rhoGS = 100.0*kg/meter**3
+rhoLS = 1000.0 * kg / meter**3
+rhoGS = 100.0 * kg / meter**3
 reference_densities = [rhoLS, rhoGS]
-sys = jd.ImmiscibleSystem(phases, reference_densities = reference_densities)
-model = jd.setup_reservoir_model(domain, sys, wells = [Injector, Producer])
+sys = jd.ImmiscibleSystem(phases, reference_densities=reference_densities)
+model = jd.setup_reservoir_model(domain, sys, wells=[Injector, Producer])
 # Replace dynamic functions with custom ones
-c = np.array([1e-6/bar, 1e-4/bar])
-density = jd.jl.ConstantCompressibilityDensities(
-    p_ref = 100*bar,
-    density_ref = reference_densities,
-    compressibility = c
+c = np.array([1e-6 / bar, 1e-4 / bar])
+density = jd.ConstantCompressibilityDensities(
+    p_ref=100 * bar, density_ref=reference_densities, compressibility=c
 )
-kr = jd.jl.BrooksCoreyRelativePermeabilities(sys, np.array([2.0, 3.0]))
-jd.replace_variables(model, PhaseMassDensities = density, RelativePermeabilities = kr)
+kr = jd.BrooksCoreyRelativePermeabilities(sys, [2.0, 3.0])
+jd.replace_variables(model, PhaseMassDensities=density, RelativePermeabilities=kr)
 # Set the initial conditions
-state0 = jd.setup_reservoir_state(model,
-    Pressure = 120*bar,
-    Saturations = np.array([1.0, 0.0])
+state0 = jd.setup_reservoir_state(
+    model, Pressure=120 * bar, Saturations=np.array([1.0, 0.0])
 )
 # Set up reporting steps
 nstep = 25
-dt = np.repeat(365.0*day, nstep)
+dt = np.repeat(365.0 * day, nstep)
 # Set up timestepping and well controls
 pv = jd.pore_volume(model)
-inj_rate = 1.5*np.sum(pv)/sum(dt)
-I_ctrl = jd.setup_injector_control(inj_rate, "rate", np.array([0.0, 1.0]), density = rhoGS)
-P_ctrl = jd.setup_producer_control(100*bar, "bhp")
-controls = dict(Injector = I_ctrl, Producer = P_ctrl)
-forces = jd.setup_reservoir_forces(model, control = controls)
-result = jd.simulate_reservoir(state0, model, dt, forces = forces)
+inj_rate = 1.5 * np.sum(pv) / sum(dt)
+I_ctrl = jd.setup_injector_control(
+    inj_rate, "rate", np.array([0.0, 1.0]), density=rhoGS
+)
+P_ctrl = jd.setup_producer_control(100 * bar, "bhp")
+controls = dict(Injector=I_ctrl, Producer=P_ctrl)
+forces = jd.setup_reservoir_forces(model, control=controls)
+result = jd.simulate_reservoir(state0, model, dt, forces=forces)
 
 # To run the following:
 # 1. Run in an environment that supports plotting (OpenGL capable)
 # 2. Run jd.install_plotting()
-# 
+#
 # plt = jd.plot_reservoir(model, result.states)
 # jd.make_interactive()
 
 # Convert to Python dictionary
 case = jd.setup_jutul_case(state0, model, dt, forces)
-res_py = jd.convert_to_pydict(result, case, units = "field")
+res_py = jd.convert_to_pydict(result, case, units="field")

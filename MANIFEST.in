@@ -1,0 +1,3 @@
+include Project.toml
+recursive-include examples *.py
+recursive-include tests *.py *.DATA

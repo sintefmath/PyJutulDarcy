@@ -1,4 +1,8 @@
 from .julia_import import jl
+from .conversion import to_julia, _kwargs
+
+__all__ = ["setup_case_from_data_file", "parse_data_file", "test_file_path"]
+
 
 def setup_case_from_data_file(*arg, **kwargs):
     """
@@ -8,8 +12,12 @@ def setup_case_from_data_file(*arg, **kwargs):
     Examples:
     case = jd.setup_case_from_data_file(filename, <kwargs>)
     """
-    res = jl.JutulDarcy.setup_case_from_data_file(*arg, **kwargs)
+    res = jl.JutulDarcy.setup_case_from_data_file(
+        *(to_julia(a, symbols=False) for a in arg),
+        **_kwargs(kwargs, symbol_keys=("backend",)),
+    )
     return res
+
 
 def parse_data_file(data_file_name, **kwargs):
     """
@@ -18,8 +26,9 @@ def parse_data_file(data_file_name, **kwargs):
     pth = test_file_path("SPE1", "SPE1.DATA")
     res = jd.parse_data_file(pth)
     """
-    res = jl.GeoEnergyIO.parse_data_file(data_file_name, **kwargs)
+    res = jl.GeoEnergyIO.parse_data_file(to_julia(data_file_name), **_kwargs(kwargs))
     return res
+
 
 def test_file_path(*args):
     """
