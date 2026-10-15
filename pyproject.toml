@@ -18,11 +18,13 @@ dependencies = ["juliacall>=0.9.31,<0.10", "juliapkg>=0.1.22,<0.2", "numpy>=1.23
 
 [project.optional-dependencies]
 test = ["pytest>=8", "ruff>=0.11", "build>=1"]
+docs = ["sphinx>=8.2,<9", "sphinx-autoapi>=3.6,<4", "furo>=2024.8.6"]
 
 [project.urls]
 Repository = "https://github.com/sintefmath/PyJutulDarcy"
 "Julia repository" = "https://github.com/sintefmath/JutulDarcy.jl"
-Documentation = "https://sintefmath.github.io/JutulDarcy.jl/dev/"
+Documentation = "https://sintefmath.github.io/PyJutulDarcy/"
+"Julia documentation" = "https://sintefmath.github.io/JutulDarcy.jl/dev/"
 
 [tool.setuptools]
 packages = ["jutuldarcy"]

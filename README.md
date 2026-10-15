@@ -1,144 +1,167 @@
 # PyJutulDarcy
 
-Python access to [JutulDarcy.jl](https://github.com/sintefmath/JutulDarcy.jl).
-See the [main documentation](https://sintefmath.github.io/JutulDarcy.jl/dev/)
-for physics, model options and examples. This README covers wrapper specifics.
+Python wrapper for [JutulDarcy.jl, a fully differentiable reservoir simulator written in Julia](https://github.com/sintefmath/JutulDarcy.jl). Key features:
 
-## Installation and Julia environment
+- Immiscible, black-oil and compositional multiphase flow
+- Geothermal simulation and simulation of CO2 sequestration
+- Can read standard input files and corner-point grids, or make your own
+
+This package facilitates automatic installation of JutulDarcy from Python, as well as a minimal interface that allows fast simulation of .DATA files in pure Python. For more details about JutulDarcy.jl, please see the [Julia Documentation](https://sintefmath.github.io/JutulDarcy.jl/dev/). If you want to run MPI accelerated simulations we recommend working either in Julia or the [standalone compiled version](https://github.com/sintefmath/JutulDarcyApps.jl).
+
+For wrapper-specific installation, Python/Julia conversions and API reference, see the [Python documentation](https://sintefmath.github.io/PyJutulDarcy/).
+
+The package also provides access to all the functions of the Julia version under `jutuldarcy.jl.JutulDarcy`, `jutuldarcy.jl.GeoEnergyIO` and `jutuldarcy.jl.Jutul`. These functions are directly wrapped using [JuliaCall](https://github.com/JuliaPy/PythonCall.jl). For more details, see the [JuliaCall Documentation on converting of types](https://juliapy.github.io/PythonCall.jl/stable/conversion-to-julia/).
+
+## Installation
+
+The package can be installed with pip:
 
 ```sh
-pip install .
+pip install jutuldarcy
 ```
 
-The `0_4` branch follows the upcoming **JutulDarcy 0.4** on Julia 1.11+.
-The repository's `Project.toml` uses `[sources]` to select upstream `main`;
-`jutuldarcy/juliapkg.json` declares the same source for automatic installation.
-The first `import jutuldarcy` installs/resolves Julia and its packages through
-[JuliaPkg](https://github.com/JuliaPy/pyjuliapkg). Use a Python virtual environment
-to keep these dependencies isolated. Development source revisions can change.
+On first time usage of the package [JuliaCall](https://github.com/JuliaPy/PythonCall.jl) will automatically install Julia and manage all dependency packages.
 
-To use the repository Julia project explicitly, set
-`PYTHON_JULIAPKG_PROJECT` to its **absolute directory path** before importing.
-JuliaCall's normal environment settings, including `PYTHON_JULIAPKG_EXE` and
-`PYTHON_JULIACALL_THREADS`, also apply; set them before the first import.
+### Activating plotting
 
-## Python inputs and outputs
+There is highly experimental support for 3D and 2D visualization. To enable, you can either add `GLMakie` to your environment manually, or run the following:
 
 ```python
 import jutuldarcy as jd
-
-mesh = jd.reservoir_mesh((10, 10, 2), (1000.0, 1000.0, 20.0))
-domain = jd.reservoir_domain(mesh, permeability=1e-13, porosity=0.2)
-
-path = jd.test_file_path("SPE9", "SPE9.DATA")  # downloads the example if needed
-case = jd.setup_case_from_data_file(path)
-result = jd.simulate_reservoir(case)
-python_result = jd.convert_to_pydict(result, case, units="field")
+jd.install_plotting()
 ```
 
-- Lists, tuples, NumPy arrays, dictionaries and `pathlib.Path` inputs are converted
-  to native Julia values. Julia objects remain Julia objects.
-- Indices use **Julia's one-based convention**, including cells, well coordinates,
-  region numbers and indices into Julia arrays. Python/NumPy outputs use normal
-  zero-based indexing. Arrays retain shape: phase/component rows, cell columns.
-- Property dictionaries use Symbol keys in Julia. `to_julia(d, symbols=False)`
-  preserves strings for parsed DATA/GRDECL dictionaries. `to_python` recursively
-  copies Julia dictionaries and numeric arrays to Python/NumPy.
-- Simulation returns a Julia `ReservoirSimResult`. `convert=True` returns a Python
-  dictionary with `WELLS`, `FIELD`, `DAYS` and `STATES`. Conversion units affect
-  summary values; `STATES` retain simulation units. Supply `case` when converting
-  a result after `simulate_reservoir`; DATA-file results already retain their case.
-- Wrapped mutators omit Julia's `!`: `set_relative_permeability`,
-  `set_capillary_pressure`, `replace_variables`, `set_secondary_variables`.
-  They return the modified model. Run `setup_parameters(model)` after changing
-  property definitions if you keep parameters separately.
+Note that this requires that you are running in an environment that supports plotting (OpenGL capable, i.e. not at a SSH remote without forwarding).
 
-The wrapper exposes mesh/domain helpers, states/equilibrium initialization,
-well controls and trajectories, sources/boundaries, relperm/Pc tables and
-parameter setup. See [examples/standalone.py](examples/standalone.py).
-Anything else is accessible through `jd.jl.JutulDarcy`, `jd.jl.Jutul`,
-`jd.jl.GeoEnergyIO` and `jd.jl.MultiComponentFlash`; see
-[JuliaCall conversions](https://juliapy.github.io/PythonCall.jl/stable/conversion-to-julia/).
+## Examples
 
-## Execution backends
+Copies of these examples can be found in the `examples` directory.
 
-Simulation and `setup_reservoir_simulator` default to `mode="ka"` (CPU).
-Strings for Julia options such as `mode`, `method` and `linear_solver` are
-converted to Symbols. Pass a Julia `ka_backend` object for custom KA devices.
+### A minimal example: Running a benchmark file
 
 ```python
-jd.activate_cuda()  # installs CUDA only if absent; loads it; returns functional()
-# Alternatively: jd.activate_amd()
-result = jd.simulate_reservoir(case, gpu=True)
-simulator, config = jd.setup_reservoir_simulator(case, gpu="cuda")
-result = jd.simulate_reservoir(case, simulator=simulator, config=config)
+import jutuldarcy as jd
+# Load SPE9 dataset to disk
+pth = jd.test_file_path("SPE9", "SPE9.DATA")
+# Simulate the model and convert to Python dicts
+res = jd.simulate_data_file(pth, convert = True)
+# Get field quantities and plot
+import matplotlib.pyplot as plt
+fopr = res["FIELD"]["FOPR"]
+days = res["DAYS"]
+plt.plot(days, fopr)
+plt.ylabel("Field oil production")
+plt.xlabel("Days")
+plt.show()
 ```
 
-`gpu=True` (or `mode="gpu"`) chooses an activated, functional CUDA backend, then AMDGPU. Use
-`gpu="cuda"` / `gpu="amd"` or explicit `mode="ka_cuda"` / `mode="ka_amd"`
-to select one. A missing/nonfunctional requested GPU raises an error.
-`available_backends()` lists usable activated GPUs. `mode="default"` selects
-the traditional CPU path. Choose the mode when constructing a simulator.
+<img width="299" alt="pyplot_fopr" src="https://github.com/user-attachments/assets/9b69bdee-91d9-4b37-ba20-05725f224cd9" />
 
-`remove_cuda()` and `remove_amd()` remove optional JuliaPkg requirements and
-disable automatic selection. Restart Python to unload a Julia GPU module.
-For device and model limitations, see the
-[upstream simulator API](https://sintefmath.github.io/JutulDarcy.jl/dev/man/highlevel/).
+Here, res is a standard dict containing the following fields:
 
-## Gradients
+- "FIELD": Field quantities (average pressure, total water injection, etc) as numpy arrays.
+- "WELLS": Well quantities (bottom hole pressures, injection rates, production rates, etc)
+- "STATES": Reservoir states for all active cells, given as a list with a dict for each timestep. For example, `res["STATES"][10]["Rs"]` will give you an array of the solution gas-oil-ratio at step 10.
+- "DAYS": Array of the number of days elapsed for each step.
+
+Optionally, if the keyword argument `convert` to `simulate_data_file` is set to `False` or left defaulted, the "full" output as seen in Julia will be returned, where it is possible to get access to grid geometry, model parameters, and so on.
+
+### Setting up a simulation without input file
+
+This example is a port of [the first JutulDarcy.jl documentation example](https://sintefmath.github.io/JutulDarcy.jl/dev/man/first_ex). If you want to understand a bit more about what is going on, please refer to that page.
+
+Note that only a subset of the full set of routines are available directly in the wrapper. PRs that add more wrapping functionality is welcome.
 
 ```python
-def objective(model, state, dt, step, forces):
-    pressure = state[jd.jl.Symbol("Reservoir")][jd.jl.Symbol("Pressure")]
-    return jd.jl.sum(pressure) * dt
-
-result = jd.simulate_reservoir(case, mode="default", output_substates=True)
-gradients = jd.reservoir_sensitivities(case, result, objective, convert=True)
-# Or: result, gradients = jd.reservoir_sensitivities(case, objective, convert=True)
+import jutuldarcy as jd
+import numpy as np
+# Grab some unit conversion factors
+day = jd.si_unit("day")
+Darcy = jd.si_unit("darcy")
+kg = jd.si_unit("kilogram")
+meter = jd.si_unit("meter")
+bar = jd.si_unit("bar")
+# Set up mesh
+nx = ny = 25
+nz = 10
+cart_dims = (nx, ny, nz)
+physical_dims = (1000.0*meter, 1000.0*meter, 100.0*meter)
+g = jd.CartesianMesh(cart_dims, physical_dims)
+# Convert to unstructured representation
+g = jd.UnstructuredMesh(g)
+domain = jd.reservoir_domain(g, permeability = 0.3*Darcy, porosity = 0.2)
+Injector = jd.setup_vertical_well(domain, 1, 1, name = "Injector")
+Producer = jd.setup_well(domain, (nx, ny, 1), name = "Producer")
+# Show the properties in the domain
+phases = (jd.LiquidPhase(), jd.VaporPhase())
+rhoLS = 1000.0*kg/meter**3
+rhoGS = 100.0*kg/meter**3
+reference_densities = [rhoLS, rhoGS]
+sys = jd.ImmiscibleSystem(phases, reference_densities = reference_densities)
+model = jd.setup_reservoir_model(domain, sys, wells = [Injector, Producer])
+# Replace dynamic functions with custom ones
+c = np.array([1e-6/bar, 1e-4/bar])
+density = jd.ConstantCompressibilityDensities(
+    p_ref = 100*bar,
+    density_ref = reference_densities,
+    compressibility = c
+)
+kr = jd.BrooksCoreyRelativePermeabilities(sys, np.array([2.0, 3.0]))
+jd.replace_variables(model, PhaseMassDensities = density, RelativePermeabilities = kr)
+parameters = jd.setup_parameters(model)
+# Set the initial conditions
+state0 = jd.setup_reservoir_state(model,
+    Pressure = 120*bar,
+    Saturations = np.array([1.0, 0.0])
+)
+# Set up reporting steps
+nstep = 25
+dt = np.repeat(365.0*day, nstep)
+# Set up timestepping and well controls
+pv = jd.pore_volume(model, parameters)
+inj_rate = 1.5*np.sum(pv)/sum(dt)
+I_ctrl = jd.setup_injector_control(inj_rate, "rate", np.array([0.0, 1.0]), density = rhoGS)
+P_ctrl = jd.setup_producer_control(100*bar, "bhp")
+controls = dict(Injector = I_ctrl, Producer = P_ctrl)
+forces = jd.setup_reservoir_forces(model, control = controls)
+result = jd.simulate_reservoir(state0, model, dt, parameters = parameters, forces = forces)
 ```
 
-Python objectives use Julia values, including automatic differentiation values.
-Use Julia arithmetic/reductions; casting to `float` or NumPy can discard
-derivatives. Julia objective functions are accepted directly too. Gradient keys
-such as `"porosity"` and `"permeability"` map to NumPy arrays with `convert=True`;
-otherwise the gradient is a Julia DataDomain. Adjoint solves use the host model;
-use the CPU path above for forward results reused in an adjoint solve.
-Lower-level adjoints, objective evaluation, NPV and parameter optimization setup
-are also wrapped. See the
-[upstream sensitivity examples](https://sintefmath.github.io/JutulDarcy.jl/dev/).
+#### Converting to Python dict
 
-## Plotting
+We can convert the result into a standard `dict` with `numpy` array types:
 
 ```python
-jd.install_plotting()  # GLMakie; requires an OpenGL-capable display
-figure = jd.plot_reservoir(case.model, result)
-# In a script, use block=True to wait until the window closes.
+case = jd.setup_jutul_case(state0, model, dt, forces, parameters)
+res_py = jd.convert_to_pydict(result, case, units = "field")
 ```
 
-Plot functions return a Makie figure immediately and accept native results or
-Python state dictionaries/lists. Errors propagate with their Julia diagnostics.
-For headless rendering:
+#### Plotting results (experimental)
+
+We can also plot the results if the plotting has been installed:
 
 ```python
-jd.install_plotting("CairoMakie")
-figure = jd.plot_reservoir(case.model, result, display=False, key="Pressure")
-jd.jl.CairoMakie.save("pressure.png", figure)
+plt = jd.plot_reservoir(model, result.states)
+jd.make_interactive()
+```
+<img width="790" alt="front" src="https://github.com/user-attachments/assets/8b7f1f99-131d-4275-8290-51813ba96b43" />
+
+## Paper and citing
+
+The main paper describing `JutulDarcy.jl` is [*JutulDarcy.jl - a Fully Differentiable High-Performance Reservoir Simulator Based on Automatic Differentiation*, available as open access from Springer](https://link.springer.com/article/10.1007/s10596-025-10366-6#citeas):
+
+```bibtex
+@article{jutuldarcy,
+  title={JutulDarcy.jl - a fully differentiable high-performance reservoir simulator based on automatic differentiation},
+  author={M{\o}yner, Olav},
+  journal={Computational Geosciences},
+  volume={29},
+  number={30},
+  year={2025},
+  publisher={Springer}
+}
 ```
 
-`activate_plotting(backend)` loads an already installed backend;
-`uninstall_plotting(backend)` removes its requirement. CairoMakie selects the
-static reservoir plot automatically.
+## Contributing
 
-## Development
-
-```sh
-pip install -e '.[test]'
-pytest -m 'not plotting'
-ruff check jutuldarcy tests examples
-```
-
-The tests run real small Julia simulations and compare an adjoint gradient with
-finite differences. To test headless plots, install CairoMakie and set
-`PYJUTULDARCY_TEST_PLOTTING=1`, then run `pytest -m plotting`. CI covers Linux,
-Windows and headless rendering. Examples are Python scripts; notebooks are not
-stored in this repository.
+Contributions that expose additional functionality is welcome. See the [contributor guide](https://sintefmath.github.io/PyJutulDarcy/development.html) for tests and documentation builds.

@@ -1,3 +1,6 @@
 include Project.toml
 recursive-include examples *.py
 recursive-include tests *.py *.DATA
+recursive-include docs *.rst *.py
+prune docs/_build
+prune docs/api
