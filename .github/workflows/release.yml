@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment:
-      name: pypi
+      name: release
       url: https://pypi.org/project/jutuldarcy/
     permissions:
       id-token: write # Required for PyPI Trusted Publishing and attestations.
