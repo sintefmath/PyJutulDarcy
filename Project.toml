@@ -1,0 +1,14 @@
+[deps]
+JutulDarcy = "82210473-ab04-4dce-b31b-11573c4f8e0a"
+Jutul = "2b460a1a-8a2b-45b2-b125-b5c536396eb9"
+GeoEnergyIO = "3b1dd628-313a-45bb-9d8d-8f3c48dcb5d4"
+MultiComponentFlash = "35e5bd01-9722-4017-9deb-64a5d32478ff"
+HYPRE = "b5ffcf37-a2bd-41ab-a3da-4bd9bc8ad771"
+
+[compat]
+julia = "1.11"
+JutulDarcy = "0.4"
+Jutul = "0.5.2"
+GeoEnergyIO = "1.2"
+MultiComponentFlash = "2"
+HYPRE = "1.6"

@@ -1,0 +1,5 @@
+include Project.toml
+include mkdocs.yml
+recursive-include examples *.py
+recursive-include tests *.py *.DATA
+recursive-include docs *.md *.py

@@ -68,9 +68,6 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
-
 # PyBuilder
 .pybuilder/
 target/
@@ -173,4 +170,9 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 *.lock
-notebooks/juliapkg.json
+*.ipynb
+Manifest.toml
+# JuliaPkg runtime files when using the repository as its project
+/pyjuliapkg/
+/lock.pid
+/.vscode

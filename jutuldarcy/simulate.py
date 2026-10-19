@@ -1,69 +1,57 @@
+"""Simulation entry points; KernelAbstractions on CPU is the default."""
+
 from .julia_import import jl
-from .conversion import _convert_units, convert_to_pydict
+from .conversion import to_julia, convert_to_pydict, _convert_units
+from .backends import _simulation_kwargs
 
-def simulate_data_file(data_file_name, convert = False, units = jl.missing, **kwargs):
-    """
-    Simulate a reservoir .DATA file using JutulDarcy and return the results
-    either as a JutulDarcy simulation result, or as a Python dictionary (if
-    convert = True). The resulting dictionary has the following fields:
+__all__ = ["simulate_data_file", "simulate_reservoir", "setup_reservoir_simulator"]
 
-    - WELLS: A dictionary of well results, where each key is a well name and the
-      value is a dictionary of results for that well.
-    - FIELD: A dictionary of field results.
-    - DAYS: A numpy array of time in days.
-    - STATES: A list of dictionaries, each representing the state of the reservoir
-      at a given time step. The field vary based on the type of simulation.
-    
-    If you are looking for files to test, see test_file_path() for a few
-    examples of files to test.
 
-    Examples:
-    pth = test_file_path("SPE1", "SPE1.DATA")
-    # Simulate the data file and convert to Python dictionary
-    res = jd.simulate_data_file(pth, units = "field", restart = True, output_path = "/tmp")
-    # Write output to disk and apply restart (restarting if simulation was aborted, otherwise retrieving results from disk)
-    import tempfile
-    res = jd.simulate_data_file(pth, restart = True, output_path = tempfile.gettempdir())
-    # Simulate and change the units to field units even if input file has other units
-    res = jd.simulate_data_file(pth, units = "field")
-
-    """
+def simulate_data_file(
+    data_file_name, *, convert=False, units=jl.missing, mode="ka", gpu=False, **kwargs
+):
+    """Simulate a DATA path or parsed deck; gpu=True selects an activated GPU."""
     units = _convert_units(units)
-    res = jl.JutulDarcy.simulate_data_file(data_file_name, **kwargs)
-    if convert:
-        out = convert_to_pydict(res, units=units)
+    result = jl.JutulDarcy.simulate_data_file(
+        to_julia(data_file_name, symbols=False),
+        **_simulation_kwargs(mode, gpu, **kwargs),
+    )
+    return convert_to_pydict(result, units=units) if convert else result
+
+
+def simulate_reservoir(
+    *args, convert=False, units=jl.missing, mode="ka", gpu=False, **kwargs
+):
+    """Simulate a case or (state0, model, dt); optionally return Python results."""
+    units = _convert_units(units)
+    # A supplied simulator/config already determines the execution backend.
+    if "simulator" in kwargs:
+        if gpu or mode != "ka":
+            raise ValueError(
+                "Select mode/gpu when constructing the supplied simulator."
+            )
+        from .conversion import _kwargs
+
+        options = _kwargs(kwargs)
     else:
-        out = res
-    return out
-
-def simulate_reservoir(*arg, convert = False, units = jl.missing, **kwargs):
-    """
-    Simulate a reservoir using JutulDarcy.
-
-    Wraps
-    [JutulDarcy.simulate_reservoir](https://sintefmath.github.io/JutulDarcy.jl/dev/man/highlevel#JutulDarcy.simulate_reservoir)
-    and returns the results as either a simulation result or a Python Dict (if convert = True).
-
-    Examples:
-    res = jd.simulate_reservoir(case)
-    res = jd.simulate_reservoir(case, convert = True)
-    res = jd.simulate_reservoir(state0, model, dt, parameters = prm, forces = forces)
-    """
-    res = jl.JutulDarcy.simulate_reservoir(*arg, **kwargs)
-    if convert:
-        out = convert_to_pydict(res, units=units)
+        options = _simulation_kwargs(mode, gpu, **kwargs)
+    converted = tuple(to_julia(arg) for arg in args)
+    result = jl.JutulDarcy.simulate_reservoir(*converted, **options)
+    if not convert:
+        return result
+    if len(converted) == 1:
+        case = converted[0]
     else:
-        out = res
-    return out
+        from .utils import setup_jutul_case
 
-def setup_case_from_data_file(*arg, **kwargs):
-    """
-    Setup a case from a .DATA file.
+        case = setup_jutul_case(
+            *converted, forces=kwargs.get("forces"), parameters=kwargs.get("parameters")
+        )
+    return convert_to_pydict(result, case, units=units)
 
-    Wraps [JutulDarcy.setup_case_from_data_file](https://sintefmath.github.io/JutulDarcy.jl/dev/man/basics/input_files#DATA-files-from-commercial-reservoir-modelling-software).
 
-    Examples:
-    case = jd.setup_case_from_data_file(case)
-    res = jd.simulate_reservoir(case)
-    """
-    return jl.JutulDarcy.setup_case_from_data_file(*arg, **kwargs)
+def setup_reservoir_simulator(*args, mode="ka", gpu=False, **kwargs):
+    """Return (simulator, config). Supports mode='ka_*' and Julia ka_backend objects."""
+    return jl.JutulDarcy.setup_reservoir_simulator(
+        *(to_julia(arg) for arg in args), **_simulation_kwargs(mode, gpu, **kwargs)
+    )
