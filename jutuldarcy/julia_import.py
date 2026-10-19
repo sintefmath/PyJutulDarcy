@@ -1,6 +1,7 @@
 import os
 import sys
 import warnings
+from pathlib import Path
 # The following code that handles juliacall issues is copied from PySR
 # Copyright 2020 Miles Cranmer, Apache 2.0 License.
 # Source: https://github.com/MilesCranmer/PySR/blob/cd055a67728eeb675c76dedfe5d5e669eea3a6d1/pysr/julia_import.py
@@ -29,10 +30,12 @@ else:
 
 # Actual start of module - now that juliacall can be imported
 import juliacall
-from juliacall import convert as jlconvert
-jl = juliacall.newmodule("JutulDarcy")
-import numpy as np
+from juliacall import convert as jlconvert  # noqa: E402, F401
+
+JuliaValue = juliacall.AnyValue
+jl = juliacall.newmodule("PyJutulDarcy")
 
 # Load the main package + linear solver
 jl.seval("using JutulDarcy, Jutul, HYPRE, MultiComponentFlash, GeoEnergyIO")
 jl.seval("import JutulDarcy: summary_result")
+jl.include(str(Path(__file__).with_name("bridge.jl")))

@@ -1,4 +1,3 @@
-
 from .julia_import import jl
 from .simulate import *
 from .parsing import *
@@ -11,3 +10,6 @@ from .systems import *
 from .model import *
 from .utils import *
 from .plotting import *
+from .backends import *
+from .properties import *
+from .gradients import *
