@@ -1,19 +1,30 @@
-# Example of plotting a reservoir simulation result using JutulDarcy's plotting
-# functions. These plots use GLMakie, which requires an OpenGL-capable
-# environment. If you are running in an environment that does not support
-# plotting, you can still run the simulation and convert the results to a Python
-# dictionary (see examples/standalone.py for an example of this) and then use a
-# Python plotting library to visualize the results.
-import jutuldarcy as jd
+"""Plot reservoir pressure with Makie.
 
-pth = jd.test_file_path("SPE9", "SPE9.DATA")
-case = jd.setup_case_from_data_file(pth)
-result = jd.simulate_reservoir(case)
-if not jd.activate_plotting():
-    print(
-        "Plotting is not available in this environment. Please run jd.install_plotting() and try again."
-    )
-# Plot the reservoir results (3D)
-jd.plot_reservoir(case.model, result.states)
-# Plot the well results (2D)
-jd.plot_well_results(result)
+Run `jd.install_plotting()` once for interactive OpenGL windows. For headless
+rendering, install CairoMakie with `jd.install_plotting("CairoMakie")` and call
+`main(output_dir=...)`. The model is built by the companion standalone example.
+"""
+
+from pathlib import Path
+
+import jutuldarcy as jd
+from standalone import build_case
+
+
+def main(output_dir=None):
+    case = build_case()
+    result = jd.simulate_reservoir(case, info_level=-1)
+    if output_dir is None:
+        jd.activate_plotting("GLMakie")
+        return jd.plot_reservoir(case.model, result, key="Pressure", block=True)
+    jd.activate_plotting("CairoMakie")
+    figure = jd.plot_reservoir(case.model, result, display=False, key="Pressure")
+    path = Path(output_dir) / "pressure.png"
+    jd.jl.CairoMakie.save(str(path), figure)
+    assert path.stat().st_size > 1000
+    print(f"Rendered pressure for {jd.number_of_cells(jd.reservoir_domain(case))} cells.")
+    return figure
+
+
+if __name__ == "__main__":
+    main()

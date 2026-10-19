@@ -68,10 +68,6 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
-docs/api/
-
 # PyBuilder
 .pybuilder/
 target/
@@ -176,4 +172,7 @@ cython_debug/
 *.lock
 *.ipynb
 Manifest.toml
+# JuliaPkg runtime files when using the repository as its project
+/pyjuliapkg/
+/lock.pid
 /.vscode

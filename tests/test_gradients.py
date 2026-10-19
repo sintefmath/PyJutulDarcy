@@ -60,3 +60,34 @@ def test_julia_objective_and_optimization_config(tiny_case):
         tiny_case, objective, print=False
     )
     assert np.isfinite(getattr(problem, "F!")(problem.x0))
+
+
+def test_objective_includes_internal_timesteps(tiny_case):
+    result = jd.simulate_reservoir(
+        tiny_case,
+        mode="default",
+        output_substates=True,
+        initial_dt=21600.0,
+        max_timestep=43200.0,
+        info_level=-1,
+    )
+    assert len(result.states) > len(tiny_case.dt)
+    # Integrate the expanded coupled states with their actual durations. Using
+    # only the final state of each report step gives a different integral.
+    states, dt, _ = jd.jl.Jutul.expand_to_ministeps(result.result)
+    expected = sum(
+        float(pressure_objective(tiny_case.model, state, float(step_dt), None, None))
+        for state, step_dt in zip(states, dt)
+    )
+    for value in (
+        jd.evaluate_objective(pressure_objective, tiny_case, result),
+        jd.evaluate_objective(pressure_objective, tiny_case, result.result),
+        jd.evaluate_objective(
+            pressure_objective,
+            tiny_case.model,
+            result,
+            tiny_case.dt,
+            tiny_case.forces,
+        ),
+    ):
+        np.testing.assert_allclose(float(value), expected, rtol=1e-12)

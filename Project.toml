@@ -5,9 +5,6 @@ GeoEnergyIO = "3b1dd628-313a-45bb-9d8d-8f3c48dcb5d4"
 MultiComponentFlash = "35e5bd01-9722-4017-9deb-64a5d32478ff"
 HYPRE = "b5ffcf37-a2bd-41ab-a3da-4bd9bc8ad771"
 
-[sources]
-JutulDarcy = {url = "https://github.com/sintefmath/JutulDarcy.jl", rev = "main"}
-
 [compat]
 julia = "1.11"
 JutulDarcy = "0.4"

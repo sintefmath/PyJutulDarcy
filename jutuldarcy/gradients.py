@@ -85,14 +85,24 @@ def setup_reservoir_parameter_optimization(case, objective, *args, **kwargs):
 def evaluate_objective(objective, model, states, dt=None, forces=None, **kwargs):
     """Evaluate an objective with (model, states, dt, forces) or (case, result).
 
-    Passing a ReservoirSimResult selects its full coupled states, including wells.
-    The .states field exposed for plotting contains reservoir states only.
+    Passing a ReservoirSimResult includes wells and saved internal timesteps,
+    matching the objective used by the adjoint. Its .states field contains only
+    reservoir states and is intended for plotting.
     """
     if jl.isa(model, jl.Jutul.JutulCase):
         case = model
+        if jl.isa(states, jl.JutulDarcy.ReservoirSimResult):
+            states = states.result
+        if jl.isa(states, jl.Jutul.SimResult):
+            return jl.Jutul.evaluate_objective(
+                _objective(objective), case, states, **_kwargs(kwargs)
+            )
         model, dt, forces = case.model, case.dt, case.forces
     if jl.isa(states, jl.JutulDarcy.ReservoirSimResult):
-        states = states.result.states
+        states = states.result
+    if jl.isa(states, jl.Jutul.SimResult):
+        states, dt, step_index = jl.Jutul.expand_to_ministeps(states)
+        kwargs.setdefault("step_index", step_index)
     return jl.Jutul.evaluate_objective(
         _objective(objective),
         model,
