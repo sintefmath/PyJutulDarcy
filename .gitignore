@@ -176,3 +176,4 @@ Manifest.toml
 /pyjuliapkg/
 /lock.pid
 /.vscode
+/docs/_build
