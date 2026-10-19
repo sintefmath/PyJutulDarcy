@@ -22,7 +22,7 @@ jobs:
       JULIA_NUM_PRECOMPILE_TASKS: '2'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
       - uses: julia-actions/setup-julia@v2
@@ -42,7 +42,7 @@ jobs:
       JULIA_NUM_PRECOMPILE_TASKS: '2'
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - uses: julia-actions/setup-julia@v2
