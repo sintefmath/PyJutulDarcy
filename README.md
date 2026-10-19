@@ -162,3 +162,52 @@ The main paper describing `JutulDarcy.jl` is [*JutulDarcy.jl - a Fully Different
 ## Contributing
 
 Contributions that expose additional functionality is welcome.
+
+## Releasing to PyPI
+
+The [release workflow](.github/workflows/release.yml) publishes a wheel and source
+distribution when a tag named `v<version>` is pushed. The tag must exactly match
+`project.version` in `pyproject.toml`, for example `v1.2.2` for version `1.2.2`.
+Prereleases use the same convention, for example `v1.3.0rc1`.
+
+Maintainers must complete this one-time setup before pushing a release tag:
+
+1. Create a GitHub Actions environment named `pypi` in this repository. Restrict
+   deployments to **tags** matching `v*` and configure required reviewers to approve
+   publishing. Enable prevention of self-review and disable administrator bypass
+   for these protections where available.
+2. In the `jutuldarcy` project's PyPI publishing settings, add a
+   [GitHub Trusted Publisher](https://docs.pypi.org/trusted-publishers/adding-a-publisher/)
+   with these exact values:
+
+   | Setting | Value |
+   | --- | --- |
+   | Owner | `sintefmath` |
+   | Repository | `PyJutulDarcy` |
+   | Workflow filename | `release.yml` |
+   | Environment | `pypi` |
+
+3. Protect release tags matching `v*` with a repository tag ruleset. Restrict tag
+   creation to release maintainers and prevent tag updates and deletion.
+
+To release, update `project.version` in `pyproject.toml`, merge the change into
+`main`, then create and push an annotated tag for that commit:
+
+```sh
+git switch main
+git pull --ff-only
+git tag -a v1.2.2 -m "Release 1.2.2"
+git push origin v1.2.2
+```
+
+Use the version being released in place of `1.2.2`. After the workflow builds and
+validates the distributions, review the tagged commit and approve the `pypi`
+environment deployment. Publishing uses short-lived OIDC credentials and creates
+PyPI attestations; no PyPI API token or GitHub secret is needed. The publishing
+job only downloads the artifacts built in the same workflow run and uploads them
+to PyPI. Action dependencies are pinned to commit SHAs, and Dependabot proposes
+updates monthly.
+
+Each PyPI version can only be published once. If a release fails partway through
+uploading, inspect the files already on PyPI before retrying; the workflow fails
+on existing files rather than silently skipping them.
