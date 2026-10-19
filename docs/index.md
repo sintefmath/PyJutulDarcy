@@ -6,6 +6,8 @@ Julia performs the simulation and adjoint calculations.
 
 ## Install
 
+Requires Python 3.10 or newer.
+
 ```sh
 python -m pip install jutuldarcy
 ```

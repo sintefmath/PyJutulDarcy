@@ -136,8 +136,8 @@ for objectives, scaling and optimization algorithms.
 
 ## Upgrading from 1.2
 
-- Julia 1.11 or newer is required. JuliaPkg now selects the registered
-  JutulDarcy 0.4 series, Jutul 0.5 and MultiComponentFlash 2.
+- Python 3.10 and Julia 1.11 or newer are required. JuliaPkg now selects the
+  registered JutulDarcy 0.4 series, Jutul 0.5 and MultiComponentFlash 2.
 - Simulations default to KernelAbstractions on the CPU. Pass `mode="default"`
   to use the traditional simulator, including for adjoint workflows.
 - Plotting returns a figure immediately. Scripts that should wait for a window

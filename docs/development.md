@@ -49,4 +49,4 @@ to `mkdocs.yml` so it appears in navigation.
 
 CI builds the docs on pushes and pull requests; pushes to `main` also deploy
 `site/` to GitHub Pages. The test matrix covers Linux and Windows, Python
-3.9–3.13, and Julia 1.11/1.12.
+3.10, 3.12 and 3.13, and Julia 1.11/1.12.

@@ -14,6 +14,8 @@ The package also provides access to all the functions of the Julia version under
 
 ## Installation
 
+Requires Python 3.10 or newer.
+
 ```sh
 python -m pip install jutuldarcy
 ```
