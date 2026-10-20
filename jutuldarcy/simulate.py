@@ -8,7 +8,7 @@ __all__ = ["simulate_data_file", "simulate_reservoir", "setup_reservoir_simulato
 
 
 def simulate_data_file(
-    data_file_name, *, convert=False, units=jl.missing, mode="ka", gpu=False, **kwargs
+    data_file_name, *, convert=False, units=jl.missing, mode="default", gpu=False, **kwargs
 ):
     """Simulate a DATA path or parsed deck; gpu=True selects an activated GPU."""
     units = _convert_units(units)
