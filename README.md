@@ -20,8 +20,8 @@ Requires Python 3.10 or newer.
 python -m pip install jutuldarcy
 ```
 
-The first import automatically installs Julia 1.11 or newer and the registered
-**JutulDarcy 0.4** dependencies. Initial installation and compilation take several
+The first import automatically installs Julia and the registered
+**JutulDarcy** dependencies. Initial installation and compilation take several
 minutes and need network access.
 
 ## Quick start
@@ -79,26 +79,6 @@ The [release workflow](.github/workflows/release.yml) publishes a wheel and sour
 distribution when a tag named `v<version>` is pushed. The tag must exactly match
 `project.version` in `pyproject.toml`, for example `v1.2.2` for version `1.2.2`.
 Prereleases use the same convention, for example `v1.3.0rc1`.
-
-Maintainers must complete this one-time setup before pushing a release tag:
-
-1. Create a GitHub Actions environment named `pypi` in this repository. Restrict
-   deployments to **tags** matching `v*` and configure required reviewers to approve
-   publishing. Enable prevention of self-review and disable administrator bypass
-   for these protections where available.
-2. In the `jutuldarcy` project's PyPI publishing settings, add a
-   [GitHub Trusted Publisher](https://docs.pypi.org/trusted-publishers/adding-a-publisher/)
-   with these exact values:
-
-   | Setting | Value |
-   | --- | --- |
-   | Owner | `sintefmath` |
-   | Repository | `PyJutulDarcy` |
-   | Workflow filename | `release.yml` |
-   | Environment | `pypi` |
-
-3. Protect release tags matching `v*` with a repository tag ruleset. Restrict tag
-   creation to release maintainers and prevent tag updates and deletion.
 
 To release, update `project.version` in `pyproject.toml`, merge the change into
 `main`, then create and push an annotated tag for that commit:
