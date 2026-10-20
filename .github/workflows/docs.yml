@@ -33,7 +33,7 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: '1.12'
-      - uses: julia-actions/cache@v2
+      - uses: julia-actions/cache@v3
       - name: Install documentation dependencies
         run: python -m pip install '.[docs]'
       - name: Install headless plotting backend
