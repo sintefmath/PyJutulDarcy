@@ -21,7 +21,7 @@ jobs:
       PYTHON_JULIACALL_THREADS: '2'
       JULIA_NUM_PRECOMPILE_TASKS: '2'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
@@ -41,7 +41,7 @@ jobs:
       PYJUTULDARCY_TEST_PLOTTING: '1'
       JULIA_NUM_PRECOMPILE_TASKS: '2'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
